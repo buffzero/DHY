@@ -759,21 +759,25 @@ const presetRuns = {
   15:{4:6,6:12,8:24,10:35,12:12},
   17:{4:6,6:12,8:24,10:35,12:47}
 };
-// add event listeners to tier selects
-document.querySelectorAll('.tier-select').forEach(sel=>{
-  sel.addEventListener('change',()=>{
-    const tier=parseInt(sel.value);
-    const path=sel.closest('.path-wrapper')?.dataset.path;
-    if(presetRuns[tier] && path){
-      Object.entries(presetRuns[tier]).forEach(([floor,count])=>{
-        const inp=document.querySelector(`input[data-path="${path}"][data-floor="${floor}"]`);
-        if(inp){
-          inp.value=count;
-          inp.dispatchEvent(new Event('input'));
-        }
-      });
-    }
+
+function applyPreset(tier){
+  if(!presetRuns[tier]) return;
+  Object.entries(presetRuns[tier]).forEach(([floor,count])=>{
+    // 给该楼层所有输入框统一赋值（阴阳 / 风火 / 地水都会同步）
+    document.querySelectorAll(`input[data-floor="${floor}"]`).forEach(inp=>{
+      inp.value = count;
+      inp.dispatchEvent(new Event('input'));   // 触发圈圈刷新
+    });
   });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  // 监听目标修为选择
+  const sel = document.querySelector('.tier-select');
+  if(sel){
+    sel.addEventListener('change',()=>applyPreset(parseInt(sel.value)));
+    applyPreset(parseInt(sel.value));          // 初始也跑一次
+  }
 });
 /* === helper end === */
 })();
