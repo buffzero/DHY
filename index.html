@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密探升级助手</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💫</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="target-section">
+        <h2 class="target-title">🚩目标密探标记</h2>
+        <div class="target-row">
+          <span class="target-label">职业：</span>
+          <label class="target-option guidao">
+            <input type="checkbox" data-type="class" data-value="guidao">
+            <span class="target-text">诡道</span>
+          </label>
+          <label class="target-option shenji">
+            <input type="checkbox" data-type="class" data-value="shenji">
+            <span class="target-text">神纪</span>
+          </label>
+          <label class="target-option qihuang">
+            <input type="checkbox" data-type="class" data-value="qihuang">
+            <span class="target-text">岐黄</span>
+          </label>
+          <label class="target-option longdun">
+            <input type="checkbox" data-type="class" data-value="longdun">
+            <span class="target-text">龙盾</span>
+          </label>
+          <label class="target-option pojun">
+            <input type="checkbox" data-type="class" data-value="pojun">
+            <span class="target-text">破军</span>
+          </label>
+        </div>
+        <div class="target-row">
+          <span class="target-label">属性：</span>
+          <label class="target-option yin">
+            <input type="checkbox" data-type="attribute" data-value="yin">
+            <span class="target-text">阴</span>
+          </label>
+          <label class="target-option yang">
+            <input type="checkbox" data-type="attribute" data-value="yang">
+            <span class="target-text">阳</span>
+          </label>
+          <label class="target-option feng">
+            <input type="checkbox" data-type="attribute" data-value="feng">
+            <span class="target-text">风</span>
+          </label>
+          <label class="target-option huo">
+            <input type="checkbox" data-type="attribute" data-value="huo">
+            <span class="target-text">火</span>
+          </label>
+          <label class="target-option di">
+            <input type="checkbox" data-type="attribute" data-value="di">
+            <span class="target-text">地</span>
+          </label>
+          <label class="target-option shui">
+            <input type="checkbox" data-type="attribute" data-value="shui">
+            <span class="target-text">水</span>
+          </label>
+        </div>
+      </div>
+      
+      
+      
+      <div id="resourceTracker">
+        <!-- 标题 -->
+        <div class="status-board">
+            <h2>当前可升级密探</h2>
+            <div class="status-columns">
+              <!-- 职业卡片 -->
+              <div class="status-column profession-column">
+                <h3>职业</h3>
+                <div class="class-status" id="classStatus">
+                  <!-- 动态生成职业状态 -->
+                </div>
+              </div>
+              
+              <!-- 属性卡片 -->
+              <div class="status-column attribute-column">
+                <h3>属性</h3>
+                <div class="attribute-status" id="attributeStatus">
+                  <!-- 动态生成属性状态 -->
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        
+        <!-- 金钱及经验 -->
+        <div class="section">
+            <div class="section-title">金钱及经验</div>
+            <div class="resource-grid">
+                <div class="resource-item">
+                    <div class="resource-name">五铢钱 417万</div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="money-check">
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-name">经验值 2386300</div>
+                    <div class="checkbox-container">
+                        <div class="exp-status not-met" id="exp-status">未满足</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="book-inputs">
+                <div class="input-group purple">
+                    <label for="bingshu_quanjuan">兵书全卷</label>
+                    <input type="number" id="bingshu_quanjuan" min="0" value="0">
+                </div>
+                <div class="input-group blue">
+                    <label for="bingshu_canjuan">兵书残卷</label>
+                    <input type="number" id="bingshu_canjuan" min="0" value="0">
+                </div>
+            </div>
+        </div>
+        
+        <!-- 升级材料 -->
+        <div class="section">
+            <div class="section-title">升级材料</div>
+            <div class="resource-grid" id="materials-list">
+                <!-- 动态生成材料列表 -->
+            </div>
+        </div>
+        
+        <!-- 历练材料 -->
+        <div class="section">
+            <div class="section-title">历练材料</div>
+            <div class="training-container">
+                <!-- 阴阳历练 -->
+                <div class="training-category">
+                    <div class="training-category-title">阴阳历练</div>
+                    <div id="yinYangTraining"></div>
+                </div>
+                <!-- 风火历练 -->
+                <div class="training-category">
+                    <div class="training-category-title">风火历练</div>
+                    <div id="windFireTraining"></div>
+                </div>
+                <!-- 地水历练 -->
+                <div class="training-category">
+                    <div class="training-category-title">地水历练</div>
+                    <div id="earthWaterTraining"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-controls">
+            <div id="lastUpdated">最近更新：未记录</div>
+            <button id="resetButton" class="reset-btn">清空记录</button>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
