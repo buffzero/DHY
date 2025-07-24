@@ -718,37 +718,43 @@ const ResourceTracker = (() => {
     // ==================== 公共接口 ====================
     return { init };
 
-/* === Added by helper: per-category reset button & tier options === */
+/* === helper: per‑category reset button & tier options === */
 function addCategoryResetButtons(){ 
   document.querySelectorAll('.training-category').forEach(cat=>{
-    const title=cat.querySelector('.training-category-title');
-    if(!title)return;
-    // avoid duplicate
-    if(title.querySelector('.btn-reset')) return;
-    const btn=document.createElement('button');
-    btn.textContent='一键撤销';
-    btn.className='btn-reset';
-    btn.style.marginLeft='8px';
-    btn.onclick=()=>{
-      // loop through undo buttons until all counts cleared
-      cat.querySelectorAll('.undo-btn:not(:disabled)').forEach(b=>b.click());
+    const title = cat.querySelector('.training-category-title');
+    if(!title || title.querySelector('.btn-reset')) return;
+
+    const btn = document.createElement('button');
+    btn.textContent = '一键撤销';
+    btn.className   = 'btn-reset';
+    btn.style.marginLeft = '8px';
+
+    // 整类清零
+    btn.onclick = () => {
+      const key = cat.id.replace('Training','');        // yinYang / windFire / earthWater
+      state.training[key].forEach(t => t.completed = 0);
+      renderTrainingCategory(key, cat);                 // 只刷新本块
+      saveData();
     };
+
     title.appendChild(btn);
   });
 }
-// append extra tier options if select exists
+
+/* 额外级别 */
 function addExtraTierOptions(){
   document.querySelectorAll('select[target-tier]').forEach(sel=>{
     [13,15,17].forEach(v=>{
-      if(![...sel.options].some(o=>parseInt(o.value)===v)){
-        const opt=document.createElement('option');opt.value=v;opt.textContent=v;
-        sel.appendChild(opt);
+      if(![...sel.options].some(o=>+o.value===v)){
+        const opt=document.createElement('option');
+        opt.value=v; opt.textContent=v; sel.appendChild(opt);
       }
     });
   });
 }
-document.addEventListener('DOMContentLoaded',()=>{ 
-  addCategoryResetButtons(); 
+
+document.addEventListener('DOMContentLoaded', () => {
+  addCategoryResetButtons();
   addExtraTierOptions();
 });
 /* === helper end === */
@@ -764,45 +770,25 @@ function applyPreset(tier){
   const preset = presetRuns[tier];
   if(!preset) return;
 
-  // 这三个 id 对应阴阳 / 风火 / 地水的容器
   ['yinYang','windFire','earthWater'].forEach(cat=>{
-    const presetOrder = [4,6,8,10,12];        // index 0‑4
-    presetOrder.forEach((floor,idx)=>{
-      const req = presetRuns[tier][floor];
-      state.training[cat][idx].required     = req;   // ← 覆盖
-      state.training[cat][idx].userModified = true;  // ← 标记
+    [4,6,8,10,12].forEach((floor,idx)=>{
+      const req = preset[floor];
+      state.training[cat][idx] = {
+        ...state.training[cat][idx],
+        required: req,
+        userModified: true
+      };
     });
-    // 局部刷新该类别
     renderTrainingCategory(cat, document.getElementById(`${cat}Training`));
   });
+  saveData();
+}
 
-  saveData();          // 写入 localStorage
-} 
-
-
-document.addEventListener('DOMContentLoaded',()=>{
-  // 监听目标修为选择
+document.addEventListener('DOMContentLoaded', ()=>{
   const sel = document.querySelector('.tier-select');
   if(sel){
-    sel.addEventListener('change',()=>applyPreset(parseInt(sel.value)));
-    applyPreset(parseInt(sel.value));          // 初始也跑一次
+    sel.addEventListener('change',()=>applyPreset(+sel.value));
+    applyPreset(+sel.value);          // 初始跑一次
   }
 });
 /* === helper end === */
-})();
-
-// 页面初始化
-document.addEventListener('DOMContentLoaded', () => {
-    if (!('localStorage' in window)) {
-        alert('您的浏览器不支持本地存储功能，部分功能将无法使用');
-        return;
-    }
-    try {
-        ResourceTracker.init();
-    } catch (error) {
-        console.error('初始化失败:', error);
-        alert('系统初始化失败，请刷新页面重试');
-        setTimeout(() => location.reload(), 20000);
-    }
-});
-
