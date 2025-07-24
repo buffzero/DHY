@@ -766,20 +766,21 @@ function applyPreset(tier){
 
   // 这三个 id 对应阴阳 / 风火 / 地水的容器
   ['yinYang','windFire','earthWater'].forEach(cat=>{
-    const presetOrder = [4,6,8,10,12];      // 对应 index 0‑4
+    const presetOrder = [4,6,8,10,12];        // index 0‑4
     presetOrder.forEach((floor,idx)=>{
-      const req = preset[floor];
-      // 如果用户手动改过，就尊重用户设置
+      const req = presetRuns[tier][floor];
+      // 用户手改过就不覆写
       if(!state.training[cat][idx].userModified){
         state.training[cat][idx].required = req;
       }
     });
-    // 只重渲染当前类别，性能更好
+    // 局部刷新该类别
     renderTrainingCategory(cat, document.getElementById(`${cat}Training`));
   });
-}
-  saveData();                                // 写入 localStorage
-}
+
+  saveData();          // 写入 localStorage
+} 
+
 
 document.addEventListener('DOMContentLoaded',()=>{
   // 监听目标修为选择
