@@ -857,8 +857,20 @@ button:disabled:hover {
   transform: none !important;
   box-shadow: none !important;
 }
-
-
+/* 下拉框美化 */
+.tier-select{
+  display:block;
+  width:100%;
+  padding:10px 14px;
+  font-size:16px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  box-sizing:border-box;
+  appearance:none;
+  background:#fff；
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 6 5-6' fill='%23999'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+}
 
 /* === helper styles === */
 .btn-reset{
