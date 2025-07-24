@@ -323,7 +323,7 @@ const ResourceTracker = (() => {
         renderTrainingCategory('yinYang', dom.yinYangTraining);
         renderTrainingCategory('windFire', dom.windFireTraining);
         renderTrainingCategory('earthWater', dom.earthWaterTraining);
-        renderAttributeStatus();
+        renderAttributeStatus();addCategoryResetButtons();
     };
 
     // 渲染单个历练类别
@@ -769,10 +769,8 @@ function applyPreset(tier){
     const presetOrder = [4,6,8,10,12];        // index 0‑4
     presetOrder.forEach((floor,idx)=>{
       const req = presetRuns[tier][floor];
-      // 用户手改过就不覆写
-      if(!state.training[cat][idx].userModified){
-        state.training[cat][idx].required = req;
-      }
+      state.training[cat][idx].required     = req;   // ← 覆盖
+      state.training[cat][idx].userModified = true;  // ← 标记
     });
     // 局部刷新该类别
     renderTrainingCategory(cat, document.getElementById(`${cat}Training`));
