@@ -761,14 +761,24 @@ const presetRuns = {
 };
 
 function applyPreset(tier){
-  if(!presetRuns[tier]) return;
-  Object.entries(presetRuns[tier]).forEach(([floor,count])=>{
-    // 给该楼层所有输入框统一赋值（阴阳 / 风火 / 地水都会同步）
-    document.querySelectorAll(`input[data-floor="${floor}"]`).forEach(inp=>{
-      inp.value = count;
-      inp.dispatchEvent(new Event('input'));   // 触发圈圈刷新
+  const preset = presetRuns[tier];
+  if(!preset) return;
+
+  // 这三个 id 对应阴阳 / 风火 / 地水的容器
+  ['yinYang','windFire','earthWater'].forEach(cat=>{
+    const presetOrder = [4,6,8,10,12];      // 对应 index 0‑4
+    presetOrder.forEach((floor,idx)=>{
+      const req = preset[floor];
+      // 如果用户手动改过，就尊重用户设置
+      if(!state.training[cat][idx].userModified){
+        state.training[cat][idx].required = req;
+      }
     });
+    // 只重渲染当前类别，性能更好
+    renderTrainingCategory(cat, document.getElementById(`${cat}Training`));
   });
+}
+  saveData();                                // 写入 localStorage
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
