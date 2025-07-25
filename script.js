@@ -787,9 +787,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 /* === helper end === */
-
-return { init };
-})();
-
 return { init };
 })();        
