@@ -262,10 +262,24 @@ const ResourceTracker = (() => {
   }
 
   function setupEventListeners(){
-    // 防止重复绑定：先移除旧监听
-    document.removeEventListener('_RT_listener',eventHandler,true);
-    document.addEventListener('_RT_listener',eventHandler,true);
-  }
+  // 事件代理：一次绑定即可
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.undo-btn');   // 点击到“核销…”按钮？
+    if (!btn) return;                            // 不是就退出
+
+    const catDiv = btn.closest('.training-category');   // 当前历练块
+    const key    = catDiv.id.replace('Training','');    // yinYang / windFire / earthWater
+    const floor  = +btn.dataset.floor;                 // 0‑4
+    const inc    = +btn.dataset.inc;                   // 1 / 3 / 6
+
+    const t = state.training[key][floor];
+    t.completed = Math.min(t.required, t.completed + inc);  // 叠加次数但不超上限
+
+    renderTrainingCategory(key, catDiv);   // 只刷新这一块
+    renderAttributeStatus();               // 更新属性总览
+    saveData();                            // 写入 localStorage
+  }, true);
+}
 
   function eventHandler(e){
     const t=e.target;
@@ -328,7 +342,10 @@ const ResourceTracker = (() => {
   // ==================== 初始化 ====================
   function init(){
     try{
-      setupDOM(); loadData(); renderAll(); setupEventListeners();
+      setupDOM();
+      buildAttributeStatus(); 
+      renderAll(); 
+      setupEventListeners();
     }catch(e){ console.error('初始化失败',e); alert('系统初始化失败，请刷新'); }
   }
 
