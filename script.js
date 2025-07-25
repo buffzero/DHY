@@ -371,14 +371,20 @@ const ResourceTracker = (() => {
     });
     renderAttributeStatus(); saveData();
   }
+// ---- 首次 DOMContentLoaded ----
+document.addEventListener('DOMContentLoaded',()=>{
+  init();                             // ⭐️ 先初始化
 
-  // ---- 首次 DOMContentLoaded ----
-  document.addEventListener('DOMContentLoaded',()=>{
-    addCategoryResetButtons(); addExtraTierOptions();
-    const sel=document.querySelector('.tier-select');
-    if(sel){ sel.addEventListener('change',()=>applyPreset(+sel.value)); applyPreset(+sel.value); }
-    init();
-  });
+  addCategoryResetButtons();
+  addExtraTierOptions();
+
+  const sel=document.querySelector('.tier-select');
+  if(sel){
+    sel.addEventListener('change',()=>applyPreset(+sel.value));
+    applyPreset(+sel.value);          // 首次执行
+  }
+});
+
 
   // ========= 对外 =========
   return { init };
