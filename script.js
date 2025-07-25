@@ -338,6 +338,26 @@ const ResourceTracker = (() => {
       if(s){ const p=JSON.parse(s); state={...createFreshState(),...p}; }
     }catch(e){console.error('load fail',e);}
   }
+/* ===== helpers that were accidentally deleted ===== */
+
+// 计算职业、属性选中情况并渲染到小徽标
+function renderClassStatus(){
+  const box = document.getElementById('currentTargets');
+  box.innerHTML = state.targetSelection.classes
+    .map((v,i)=> v ? `<span class="tag">${CLASS_NAMES[i]}</span>` : '')
+    .join('');
+}
+function renderAttributeStatus(){
+  const box = document.getElementById('currentAttrTargets');
+  box.innerHTML = state.targetSelection.attributes
+    .map((v,i)=> v ? `<span class="tag">${ATTR_NAMES[i]}</span>` : '')
+    .join('');
+}
+function getClassKey(raw){
+   return raw.replace('Training',''); // yinYang / windFire / earthWater
+}
+
+//  ============ 其余原本在 140‑220 行的函数保持不动 ============
 
   // ==================== 初始化 ====================
   function init(){
