@@ -714,10 +714,6 @@ const ResourceTracker = (() => {
         };
         return map[className] || '';
     };
-
-    // ==================== 公共接口 ====================
-    return { init };
-
 /* === Added by helper: per-category reset button & tier options === */
 function addCategoryResetButtons(){ 
   document.querySelectorAll('.training-category').forEach(cat=>{
@@ -795,3 +791,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 /* === helper end === */
 })();
 
+
+    // ==================== 公共接口 ====================
+    return { init };
+})();
