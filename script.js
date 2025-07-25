@@ -729,6 +729,7 @@ function addCategoryResetButtons(){
       const key = cat.id.replace('Training','');      // yinYang / windFire / earthWater
       state.training[key].forEach(t => t.completed = 0);
       renderTrainingCategory(key, cat);               // 重绘本分类
+      setupEventListeners();          // 重新绑定点击事件  
       renderAttributeStatus();                        // 刷顶部进度条
       saveData();
     };
@@ -769,6 +770,7 @@ function applyPreset(tier){
       };
     });
     renderTrainingCategory(cat, document.getElementById(`${cat}Training`));
+    setupEventListeners();
   });
 
   renderAttributeStatus();   // 刷顶部进度
