@@ -714,80 +714,82 @@ const ResourceTracker = (() => {
         };
         return map[className] || '';
     };
-/* === Added by helper: per-category reset button & tier options === */
-function addCategoryResetButtons(){ 
+/* === helper: reset‑button & tier‑preset 13/15/17 === */
+function addCategoryResetButtons(){
   document.querySelectorAll('.training-category').forEach(cat=>{
-    const title=cat.querySelector('.training-category-title');
-    if(!title)return;
-    // avoid duplicate
-    if(title.querySelector('.btn-reset')) return;
-    const btn=document.createElement('button');
-    btn.textContent='一键撤销';
-    btn.className='btn-reset';
-    btn.style.marginLeft='8px';
-    
+    const title = cat.querySelector('.training-category-title');
+    if(!title || title.querySelector('.btn-reset')) return;
 
-btn.onclick = () => {
-  const key = cat.id.replace('Training','');
-  state.training[key].forEach(t => t.completed = 0);
-  renderTrainingCategory(key, cat);
-  renderAttributeStatus();
-  saveData();
-};;
+    const btn = document.createElement('button');
+    btn.textContent  = '一键撤销';
+    btn.className    = 'btn-reset';
+    btn.style.marginLeft = '8px';
+
+    btn.onclick = () => {
+      const key = cat.id.replace('Training','');      // yinYang / windFire / earthWater
+      state.training[key].forEach(t => t.completed = 0);
+      renderTrainingCategory(key, cat);               // 重绘本分类
+      renderAttributeStatus();                        // 刷顶部进度条
+      saveData();
+    };
     title.appendChild(btn);
   });
 }
-// append extra tier options if select exists
+
+/* 给目标修为下拉框追加 13/15/17 选项（若不存在） */
 function addExtraTierOptions(){
   document.querySelectorAll('select[target-tier]').forEach(sel=>{
     [13,15,17].forEach(v=>{
-      if(![...sel.options].some(o=>parseInt(o.value)===v)){
-        const opt=document.createElement('option');opt.value=v;opt.textContent=v;
+      if([ ...sel.options ].every(o => +o.value !== v)){
+        const opt = document.createElement('option');
+        opt.value = v; opt.textContent = v;
         sel.appendChild(opt);
       }
     });
   });
 }
-document.addEventListener('DOMContentLoaded',()=>{ 
-  addCategoryResetButtons(); 
-  addExtraTierOptions();
-});
-/* === helper end === */
 
-/* === helper: preset runs for tier 13/15/17 === */
+/* 预设圈数 */
 const presetRuns = {
-  13:{4:6,6:12,8:24,10:16,12:1},
-  15:{4:6,6:12,8:24,10:35,12:12},
-  17:{4:6,6:12,8:24,10:35,12:47}
+  13:{4:6, 6:12, 8:24, 10:16, 12:1},
+  15:{4:6, 6:12, 8:24, 10:35, 12:12},
+  17:{4:6, 6:12, 8:24, 10:35, 12:47}
 };
 
 function applyPreset(tier){
   const preset = presetRuns[tier];
   if(!preset) return;
 
-  // 这三个 id 对应阴阳 / 风火 / 地水的容器
   ['yinYang','windFire','earthWater'].forEach(cat=>{
-    const presetOrder = [4,6,8,10,12];        // index 0‑4
-    presetOrder.forEach((floor,idx)=>{
-      const req = presetRuns[tier][floor];
-      state.training[cat][idx].required = req;   // ← 覆盖  // ← 标记
+    [4,6,8,10,12].forEach((floor,idx)=>{
+      state.training[cat][idx] = {
+        ...state.training[cat][idx],
+        required: preset[floor],
+        userModified: true
+      };
     });
-    // 局部刷新该类别
     renderTrainingCategory(cat, document.getElementById(`${cat}Training`));
   });
 
-  saveData();          // 写入 localStorage
-} 
+  renderAttributeStatus();   // 刷顶部进度
+  saveData();
+}
 
+/* 初始 & 监听下拉 */
+document.addEventListener('DOMContentLoaded', () => {
+  addCategoryResetButtons();
+  addExtraTierOptions();
 
-document.addEventListener('DOMContentLoaded',()=>{
-  // 监听目标修为选择
   const sel = document.querySelector('.tier-select');
   if(sel){
-    sel.addEventListener('change',()=>applyPreset(parseInt(sel.value)));
-    applyPreset(parseInt(sel.value));          // 初始也跑一次
+    sel.addEventListener('change', () => applyPreset(+sel.value));
+    applyPreset(+sel.value);   // 首次运行
   }
 });
 /* === helper end === */
+
+return { init };
+})();
+
 return { init };
 })();        
