@@ -20,7 +20,7 @@ const presetRuns={
 
 // ---------- 渲染 ----------
 function render(){
-  dom.app.innerHTML=\`
+  dom.app.innerHTML=`
   <div class="container">
     <div class="section">
       <div class="section-title">目标修为</div>
