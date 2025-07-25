@@ -1,0 +1,12 @@
+
+body{font-family:-apple-system, BlinkMacSystemFont,'PingFang SC',Helvetica,Arial,sans-serif;margin:0;padding:0;background:#f5f5f7;}
+.container{max-width:960px;margin:0 auto;padding:24px;}
+.section{background:#fff;border-radius:12px;padding:24px;margin-bottom:24px;box-shadow:0 4px 12px rgba(0,0,0,.04);}
+.section-title{font-size:20px;font-weight:600;margin-bottom:12px;}
+.training-category{margin-top:16px;}
+.training-category-title{font-size:18px;font-weight:500;display:flex;align-items:center;}
+.btn-reset{margin-left:8px;background:#ff6b6b;border:none;border-radius:6px;padding:4px 12px;color:#fff;cursor:pointer;}
+.tier-select{width:100%;padding:10px 14px;font-size:16px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;}
+.material-dot{width:10px;height:10px;border-radius:50%;background:#ccc;display:inline-block;margin:2px;}
+.material-dot.done{background:#4caf50;}
+button{cursor:pointer;}
