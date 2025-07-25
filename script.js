@@ -196,11 +196,16 @@ const ResourceTracker = (() => {
         undo(undoBtn.dataset.cat, +undoBtn.dataset.idx); return;
       }
       const resetBtn = e.target.closest('.btn-reset-category');
-      if(resetBtn){
-        const key = resetBtn.dataset.cat;
-        state.training[key].forEach(t=>t.completed=0);
-        updateAndSave(); return;
-      }
+      const resetBtn = e.target.closest('.btn-reset-category');
+if (resetBtn) {
+    // 从最近的 .training-category 容器推导出 key
+    const key = resetBtn.closest('.training-category').id.replace('Training', '');
+    state.training[key].forEach(t => (t.completed = 0));
+    renderTrainingCategory(key, document.getElementById(`${key}Training`));
+    renderAttributeStatus();
+    saveData();
+    return;
+}
     });
     // 输入框
     document.addEventListener('input',e=>{
