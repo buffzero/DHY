@@ -789,9 +789,5 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 /* === helper end === */
-})();
-
-
-    // ==================== 公共接口 ====================
-    return { init };
-})();
+return { init };
+})();        
