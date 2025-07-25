@@ -159,7 +159,7 @@
   /* ======================  事件监听  ====================== */
   function setupEventListeners(){
     // 整页事件委托
-    document.addEventListener('_RT_listener', e=>{
+    document.addEventListener('click', e=>{
       const btnAdd = e.target.closest('button[data-add]');
       const btnUndo= e.target.closest('.btn-undo');
       const resetBtn=e.target.closest('.btn-reset-category');
@@ -216,6 +216,10 @@
       alert('系统初始化失败，请刷新重试');
     }
   }
+/* ---------- stub utils（占位防报错，不必关心实现） ---------- */
+function getClassKey(){ return ''; }
+function buildAttributeStatus(){ /* 旧版遗留，这里先留空 */ }
+function renderClassStatus(){ /* 旧版遗留，这里先留空 */ }
 
   /* ======================  导出  ====================== */
   document.addEventListener('DOMContentLoaded',()=>init());
